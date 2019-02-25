@@ -3,6 +3,8 @@ package org.xperiment.php.core.token.impl;
 import org.xperiment.php.core.token.abs.Token;
 import org.xperiment.php.core.token.exception.UnexpectedTokenException;
 import org.xperiment.php.core.token.line.Line;
+import org.xperiment.php.core.tree.iface.StringLiteralTree;
+import org.xperiment.php.core.tree.impl.StringLiteralTreeImpl;
 
 import java.util.Iterator;
 import java.util.List;
@@ -18,11 +20,6 @@ import java.util.regex.Pattern;
 public class TokenString extends Token {
 
     /**
-     * String value
-     */
-    private String value;
-
-    /**
      * Constructor
      * - Initializes line where token resides
      *
@@ -32,7 +29,7 @@ public class TokenString extends Token {
      * @param tokens      Tokens
      */
     public TokenString(Line line, Stack<Line> linesToRead, Iterator<Line> iterator, List<Token> tokens) {
-        super(line, linesToRead, iterator, tokens);
+        super(line, linesToRead, iterator, tokens, new StringLiteralTreeImpl());
     }
 
     /**
@@ -46,7 +43,7 @@ public class TokenString extends Token {
         boolean stringTokenExists = stringToken.find() && stringToken.start() == 0;
         if (stringTokenExists) {
             tokenPosition = stringToken.end();
-            value = stringToken.group();
+            ((StringLiteralTree)tree).value(stringToken.group());
         }
         return stringTokenExists;
     }
@@ -58,13 +55,6 @@ public class TokenString extends Token {
      */
     @Override
     public void next() throws UnexpectedTokenException {
-
-    }
-
-    /**
-     * @return  Returns the value of string token
-     */
-    public String value() {
-        return value;
+        throw new UnexpectedTokenException(line(), linesToRead().peek().toString(), linesToRead().peek().lineNumber(), "Unexpected string");
     }
 }

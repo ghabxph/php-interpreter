@@ -1,6 +1,7 @@
-package org.xperiment.php.core.token;
+package org.xperiment.php.core;
 
 import org.xperiment.php.core.token.abs.Token;
+import org.xperiment.php.core.token.abs.TokenTagOpen;
 import org.xperiment.php.core.token.exception.UnexpectedTokenException;
 import org.xperiment.php.core.token.impl.*;
 import org.xperiment.php.core.token.line.Line;
@@ -37,7 +38,8 @@ public class Lexer {
             TokenTagClose2.class,
             TokenEcho.class,
             TokenString.class,
-            TokenSemicolon.class
+            TokenSemicolon.class,
+            TokenComma.class
     };
 
     /**
@@ -57,7 +59,7 @@ public class Lexer {
      * @param iterator    Iterator that iterates through entire PHP Lines
      * @param tokens      Token list
      */
-    public void tokenize(List<Line> linesClone, Iterator<Line> iterator, List<Token> tokens) throws UnexpectedTokenException {
+    public Grammarian tokenize(List<Line> linesClone, Iterator<Line> iterator, List<Token> tokens) throws UnexpectedTokenException {
 
         Stack<Line> linesToRead = prepareLinesToRead(linesClone);
 
@@ -66,6 +68,8 @@ public class Lexer {
             this.openTag = (token instanceof TokenTagOpen) ? (TokenTagOpen)token : null;
             tokenize(linesToRead, iterator, tokens);
         }
+
+        return new Grammarian(tokens);
     }
 
     private Token tokenize(Stack<Line> linesToRead, Iterator<Line> iterator, List<Token> tokens) throws UnexpectedTokenException {
@@ -102,11 +106,7 @@ public class Lexer {
                 }
             }
             if (remainingToken.equals(linesToRead.peek().toString()) && !remainingToken.isEmpty()) {
-                throw new UnexpectedTokenException(
-                        "Error:\n" +
-                        currentLine.lineNumber() + ": " + currentLine.toString() + "\n" +
-                        "Unexpected token: " + linesToRead.peek().toString() + " at line: #" + linesToRead.peek().lineNumber()
-                );
+                throw new UnexpectedTokenException(currentLine, linesToRead.peek().toString(), linesToRead.peek().lineNumber(), "Unexpected Token");
             }
             remainingToken = linesToRead.peek().toString();
             if (linesToRead.peek().toString().isEmpty()) {

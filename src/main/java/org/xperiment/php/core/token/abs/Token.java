@@ -2,6 +2,8 @@ package org.xperiment.php.core.token.abs;
 
 import org.xperiment.php.core.token.exception.UnexpectedTokenException;
 import org.xperiment.php.core.token.line.Line;
+import org.xperiment.php.core.tree.iface.Tree;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
@@ -14,9 +16,9 @@ import java.util.Stack;
 public abstract class Token {
 
     /**
-     * Tokens
+     * Current Line
      */
-    private final List<Token> tokens;
+    private Line line;
 
     /**
      * Lines to read
@@ -24,14 +26,19 @@ public abstract class Token {
     private final Stack<Line> linesToRead;
 
     /**
-     * Current Line
-     */
-    private Line line;
-
-    /**
      * Current line being read
      */
-    private Iterator<Line> iterator;
+    private final Iterator<Line> iterator;
+
+    /**
+     * Tokens
+     */
+    private final List<Token> tokens;
+
+    /**
+     * Tree
+     */
+    protected final Tree tree;
 
     /**
      * Has token match?
@@ -53,7 +60,7 @@ public abstract class Token {
      *   - Initializes line where token resides
      *
      * @param line         Line where token resides
-     * @param linesToRead  Line where token resides
+     * @param linesToRead  Line where token resides0
      * @param iterator     Single iterator object
      * @param tokens       Tokens
      */
@@ -62,6 +69,25 @@ public abstract class Token {
         this.linesToRead = linesToRead;
         this.iterator = iterator;
         this.tokens = tokens;
+        this.tree = null;
+    }
+
+    /**
+     * Constructor
+     *   - Initializes line where token resides
+     *
+     * @param line         Line where token resides
+     * @param linesToRead  Line where token resides0
+     * @param iterator     Single iterator object
+     * @param tokens       Tokens
+     * @param tree         Tree
+     */
+    protected Token(Line line, Stack<Line> linesToRead, Iterator<Line> iterator, List<Token> tokens, Tree tree) {
+        this.line = line;
+        this.linesToRead = linesToRead;
+        this.iterator = iterator;
+        this.tokens = tokens;
+        this.tree = tree;
     }
 
     /**
@@ -127,6 +153,13 @@ public abstract class Token {
      */
     public List<Token> tokens() {
         return tokens;
+    }
+
+    /**
+     * @return  Returns tree instance
+     */
+    public Tree tree() {
+        return tree;
     }
 
     /**

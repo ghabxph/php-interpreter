@@ -1,6 +1,7 @@
 package org.xperiment.php.core.token.impl;
 
 import org.xperiment.php.core.token.abs.Token;
+import org.xperiment.php.core.token.abs.TokenTagOpen;
 import org.xperiment.php.core.token.exception.UnexpectedTokenException;
 import org.xperiment.php.core.token.line.Line;
 
@@ -36,6 +37,9 @@ public class TokenTagClose extends Token {
     @Override
     public void next() throws UnexpectedTokenException {
 
+        if (nextToken() instanceof TokenTagOpen) {
+            nextToken().next();
+        }
     }
 
     /**

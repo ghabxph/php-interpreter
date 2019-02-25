@@ -12,5 +12,6 @@ public class PhpFileTest {
     @Test
     public void loadScript() throws PhpFileException, UnexpectedTokenException {
         file.load();
+        file.execute();
     }
 }

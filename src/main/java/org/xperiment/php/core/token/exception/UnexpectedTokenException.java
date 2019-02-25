@@ -1,5 +1,7 @@
 package org.xperiment.php.core.token.exception;
 
+import org.xperiment.php.core.token.line.Line;
+
 /**
  * (Class) UnexpectedTokenException
  *     - Syntax Error
@@ -27,5 +29,13 @@ public class UnexpectedTokenException extends Exception {
      */
     public UnexpectedTokenException(String message) {
         super(message);
+    }
+
+    public UnexpectedTokenException(Line currentLine, String errToken, int lineNumber, String message) {
+        super(
+            "Error:\n" +
+                currentLine.lineNumber() + ": " + currentLine.toString() + "\n" +
+                message + ": " + errToken + " at line: #" + lineNumber
+        );
     }
 }

@@ -9,22 +9,23 @@ import java.util.List;
 import java.util.Stack;
 
 /**
- * (Token) Semicolon Token
+ * (Class) TokenComma
+ *   - Comma token, that separates arguments in a function
  *
  * @author ghabxph [me@ghabxph.info]
  */
-public class TokenSemicolon extends Token {
+public class TokenComma extends Token {
 
     /**
      * Constructor
      * - Initializes line where token resides
      *
      * @param line        Line where token resides
-     * @param linesToRead Line where token resides
+     * @param linesToRead Line where token resides0
      * @param iterator    Single iterator object
      * @param tokens      Tokens
      */
-    public TokenSemicolon(Line line, Stack<Line> linesToRead, Iterator<Line> iterator, List<Token> tokens) {
+    public TokenComma(Line line, Stack<Line> linesToRead, Iterator<Line> iterator, List<Token> tokens) {
         super(line, linesToRead, iterator, tokens);
     }
 
@@ -35,7 +36,7 @@ public class TokenSemicolon extends Token {
      */
     @Override
     protected boolean tokenMatches() {
-        String token = ";";
+        String token = ",";
         if (linesToRead().peek().toString().indexOf(token) != 0) {
             return false;
         }
@@ -50,6 +51,9 @@ public class TokenSemicolon extends Token {
      */
     @Override
     public void next() throws UnexpectedTokenException {
-        throw new UnexpectedTokenException(line(), linesToRead().peek().toString(), linesToRead().peek().lineNumber(), "Unexpected semicolon here");
+        if (nextToken() instanceof TokenSemicolon) {
+            throw new UnexpectedTokenException(line(), linesToRead().peek().toString(), linesToRead().peek().lineNumber(), "Expecting a parameter value next to ',' character");
+        }
+        nextToken().next();
     }
 }

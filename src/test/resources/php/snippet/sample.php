@@ -1,9 +1,9 @@
 <?php
 
-echo "Hello world";
-echo "Some message eh?";
+echo "Hello world", " 2nd parameter \n", "  Third parameter!@\n";
+echo "Some message eh? \n";
 ?>
 
 <?php
-echo "vavaaa";
+echo "vavaaa \n";
 echo 'qeqe';

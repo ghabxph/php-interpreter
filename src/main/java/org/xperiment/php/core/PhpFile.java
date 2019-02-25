@@ -1,10 +1,10 @@
 package org.xperiment.php.core;
 
-import org.xperiment.php.core.token.Lexer;
 import org.xperiment.php.core.token.abs.Token;
 import org.xperiment.php.core.token.exception.UnexpectedTokenException;
 import org.xperiment.php.core.token.line.Line;
 import org.xperiment.php.core.token.line.Lines;
+import org.xperiment.php.core.tree.iface.StatementTree;
 import org.xperiment.php.exception.PhpFileException;
 
 import java.nio.file.Files;
@@ -100,7 +100,18 @@ public class PhpFile {
      * Loads PHP File
      */
     public void load() throws PhpFileException, UnexpectedTokenException {
-        (new Lexer()).tokenize(loadScript().linesContainer().copy().lines(), lines().iterator(), tokens());
+        (new Lexer()).tokenize(loadScript().linesContainer().copy().lines(), lines().iterator(), tokens()).validateGrammar();
+    }
+
+    /**
+     * Runs the PHP Script
+     */
+    public void execute() {
+        for (Token token : tokens) {
+            if (token.tree() instanceof StatementTree) {
+                ((StatementTree)token.tree()).execute();
+            }
+        }
     }
 
     /**

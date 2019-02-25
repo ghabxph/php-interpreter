@@ -1,8 +1,9 @@
-package org.xperiment.php.core.token.impl;
+package org.xperiment.php.core.token.abs;
 
 import org.xperiment.php.core.token.abs.Token;
 import org.xperiment.php.core.token.exception.UnexpectedTokenException;
 import org.xperiment.php.core.token.line.Line;
+import org.xperiment.php.core.tree.iface.StatementTree;
 
 import java.util.Iterator;
 import java.util.List;
@@ -14,6 +15,11 @@ import java.util.Stack;
  * @author ghabxph [me@ghabxph.info]
  */
 public abstract class TokenTagOpen extends Token {
+
+    /**
+     * Pointer to next statement
+     */
+    private StatementTree nextStatement;
 
     /**
      * Constructor
@@ -41,6 +47,19 @@ public abstract class TokenTagOpen extends Token {
     @Override
     public void next() throws UnexpectedTokenException {
 
+        if (!(nextToken().tree() instanceof StatementTree)) {
+            throw new UnexpectedTokenException("Expecting statement.");
+        }
+
+        nextStatement = (StatementTree)nextToken().tree();
+        nextToken().next();
+    }
+
+    /**
+     * @return  Returns next statement
+     */
+    public StatementTree nextStatement() {
+        return nextStatement;
     }
 
     /**
