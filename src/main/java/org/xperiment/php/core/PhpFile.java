@@ -99,8 +99,9 @@ public class PhpFile {
     /**
      * Loads PHP File
      */
-    public void load() throws PhpFileException, UnexpectedTokenException {
+    public PhpFile load() throws PhpFileException, UnexpectedTokenException {
         (new Lexer()).tokenize(loadScript().linesContainer().copy().lines(), lines().iterator(), tokens()).validateGrammar();
+        return this;
     }
 
     /**
