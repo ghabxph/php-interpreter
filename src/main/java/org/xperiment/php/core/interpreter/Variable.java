@@ -36,10 +36,17 @@ public class Variable {
      */
     public Variable(String name, String value) {
         this.name = name;
-        setVariableValue(value);
+        this.setValue(value);
     }
 
+    /**
+     * Sets variable value
+     *
+     * @param   value Value of variable to put
+     * @return  Returns the desired data type
+     */
     public PhpDataType setValue(String value) {
-
+        data = PhpDataType.generateNewInstance().setValueAndDetermineType(value);
+        return data;q
     }
 }
