@@ -3,28 +3,28 @@ package org.xperiment.php.core.interpreter;
 import org.xperiment.php.core.interpreter.type.PhpDataType;
 
 /**
- * (Class) Variable
+ * (Class) PhpVariable
  *
  * @author ghabxph [me@ghabxph.info]
  */
-public class Variable {
+public class PhpVariable {
 
     /**
      * Name of variable
      */
-    public final String name;
+    private final String name;
 
     /**
      * Data Type (plus value)
      */
-    private PhpDataType data;
+    private PhpDataType type;
 
     /**
      * Constructor
      *
      * @param name   Sets the name of variable
      */
-    public Variable(String name) {
+    public PhpVariable(String name) {
         this.name = name;
     }
 
@@ -34,7 +34,7 @@ public class Variable {
      * @param name   Sets the name of variable
      * @param value  Sets the value of variable
      */
-    public Variable(String name, String value) {
+    public PhpVariable(String name, String value) {
         this.name = name;
         this.setValue(value);
     }
@@ -43,10 +43,22 @@ public class Variable {
      * Sets variable value
      *
      * @param   value Value of variable to put
-     * @return  Returns the desired data type
      */
-    public PhpDataType setValue(String value) {
-        data = PhpDataType.generateNewInstance().setValueAndDetermineType(value);
-        return data;q
+    public void setValue(String value) {
+        type = PhpDataType.newInstance().value(value);
+    }
+
+    /**
+     * @return  Returns appropriate data type instance
+     */
+    public PhpDataType getType() {
+        return type;
+    }
+
+    /**
+     * @return  Returns variable name
+     */
+    public String name() {
+        return name;
     }
 }

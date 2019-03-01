@@ -1,5 +1,7 @@
 package org.xperiment.php.core.interpreter.type;
 
+import java.util.regex.Pattern;
+
 /**
  * (Class) PhpFloat
  *
@@ -13,19 +15,14 @@ public class PhpFloat extends PhpDataType {
      *
      * @param firstChain First chain
      */
-    public PhpFloat(PhpDataType firstChain) {
+    PhpFloat(PhpDataType firstChain) {
         super(firstChain);
     }
 
     /**
-     * Determines data type
-     * - Should run nextType() if data type is not appropriate
-     *
-     * @param value Value of variable
-     * @return Returns the appropriate data type
+     * @return  If value matches this type, this will return true
      */
-    @Override
-    public PhpDataType setValueAndDetermineType(String value) {
-        return nextType(nextType);
+    protected boolean valueMatchesThisType() {
+        return Pattern.compile("^(0\\.[0-9]+|[-]?[1-9][0-9]*\\.[0-9]+)$").matcher(value()).find();
     }
 }

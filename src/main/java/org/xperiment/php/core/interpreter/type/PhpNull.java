@@ -5,7 +5,7 @@ package org.xperiment.php.core.interpreter.type;
  *
  * @author ghabxph [me@ghabxph.info]
  */
-public class PhpNull extends PhpDataType {
+public class PhpNull extends PhpObject {
 
     /**
      * Constructor
@@ -13,19 +13,14 @@ public class PhpNull extends PhpDataType {
      *
      * @param firstChain First chain
      */
-    public PhpNull(PhpDataType firstChain) {
+    PhpNull(PhpDataType firstChain) {
         super(firstChain);
     }
 
     /**
-     * Determines data type
-     * - Should run nextType() if data type is not appropriate
-     *
-     * @param value Value of variable
-     * @return Returns the appropriate data type
+     * @return  If value matches this type, this will return true
      */
-    @Override
-    public PhpDataType setValueAndDetermineType(String value) {
-        return nextType(nextType);
+    protected boolean valueMatchesThisType() {
+        return (value().toLowerCase().equals("null"));
     }
 }

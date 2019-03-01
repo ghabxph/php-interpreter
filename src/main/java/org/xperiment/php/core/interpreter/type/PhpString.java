@@ -13,19 +13,14 @@ public class PhpString extends PhpDataType {
      *
      * @param firstChain First chain
      */
-    public PhpString(PhpDataType firstChain) {
+    PhpString(PhpDataType firstChain) {
         super(firstChain);
     }
 
     /**
-     * Determines data type
-     * - Should run nextType() if data type is not appropriate
-     *
-     * @param value Value of variable
-     * @return Returns the appropriate data type
+     * @return  If value matches this type, this will return true
      */
-    @Override
-    public PhpDataType setValueAndDetermineType(String value) {
-        return nextType(nextType);
+    protected boolean valueMatchesThisType() {
+        return ((value().indexOf('"') == 0 || value().indexOf('\'') == 0) && (value().lastIndexOf('"') == value().length() - 1 || value().lastIndexOf('\'') == value().length() - 1));
     }
 }

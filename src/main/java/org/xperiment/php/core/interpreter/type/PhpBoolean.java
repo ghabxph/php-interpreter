@@ -13,19 +13,14 @@ public class PhpBoolean extends PhpDataType {
      *
      * @param firstChain First chain
      */
-    public PhpBoolean(PhpDataType firstChain) {
+    PhpBoolean(PhpDataType firstChain) {
         super(firstChain);
     }
 
     /**
-     * Determines data type
-     * - Should run nextType() if data type is not appropriate
-     *
-     * @param value Value of variable
-     * @return Returns the appropriate data type
+     * @return  If value matches this type, this will return true
      */
-    @Override
-    public PhpDataType setValueAndDetermineType(String value) {
-        return nextType(nextType);
+    protected boolean valueMatchesThisType() {
+        return value().toLowerCase().equals("true") || value().toLowerCase().contains("false");
     }
 }

@@ -15,12 +15,23 @@ public abstract class PhpDataType {
     /**
      * Next chained data type
      */
-    protected PhpDataType nextType;
+    private PhpDataType nextType;
+
+    /**
+     * Data type of instance
+     *   - Use typeof to determine exact data type
+     */
+    protected PhpDataType type;
 
     /**
      * Value of certain data type
      */
-    protected String value;
+    private String value;
+
+    /**
+     * @return  If value matches this type, this will return true
+     */
+    protected abstract boolean valueMatchesThisType();
 
     /**
      * Constructor
@@ -41,32 +52,12 @@ public abstract class PhpDataType {
     }
 
     /**
-     * Sets next chained data type
-     *
-     * @param   nextType  Next type to put in chain
-     * @return  Returns next chain
-     */
-    public PhpDataType nextType(PhpDataType nextType) {
-        this.nextType = nextType;
-        return this.nextType;
-    }
-
-    /**
-     * Determines data type
-     *   - Should run nextType() if data type is not appropriate
-     *
-     * @param   value  Value of variable
-     * @return  Returns the appropriate data type
-     */
-    public abstract PhpDataType setValueAndDetermineType(String value);
-
-    /**
      * Generates new instance of PhpDataType
      *   - Returns first chain (PhpArray)
      *
      * @return  Returns instance of first chain (PhpArray)
      */
-    public static PhpDataType generateNewInstance() {
+    public static PhpDataType newInstance() {
         PhpDataType type = new PhpArray();
         type.nextType(new PhpBoolean(type))
                 .nextType(new PhpFloat(type))
@@ -76,5 +67,60 @@ public abstract class PhpDataType {
                 .nextType(new PhpResource(type))
                 .nextType(new PhpString(type));
         return type;
+    }
+
+    /**
+     * Sets next chained data type
+     *
+     * @param   nextType  Next type to put in chain
+     * @return  Returns next chain
+     */
+    PhpDataType nextType(PhpDataType nextType) {
+        this.nextType = nextType;
+        return this.nextType;
+    }
+
+    /**
+     * Sets value
+     *
+     * @param   value  Value to set
+     * @return  Returns appropriate data type instance
+     */
+    public PhpDataType value(String value) {
+        this.value = value;
+        return firstChain.determineType();
+    }
+
+    /**
+     * @return  Returns value of data type
+     */
+    public String value() {
+        return value;
+    }
+
+    /**
+     * @return Returns data type
+     */
+    public PhpDataType type() {
+        return type;
+    }
+
+    /**
+     * Returns this instance, if this instance's value matches the condition
+     * specified by this instance.
+     *
+     * Proceeds to next instance if it the condition is not met.
+     *
+     * @return  Returns the appropriate data type
+     */
+    private PhpDataType determineType() {
+
+        // Initially set value first.
+        value = firstChain.value();
+
+        if (valueMatchesThisType()) {
+            return this;
+        }
+        return (nextType == null) ? null : nextType.determineType();
     }
 }
