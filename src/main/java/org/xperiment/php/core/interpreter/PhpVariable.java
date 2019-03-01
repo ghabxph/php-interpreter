@@ -35,7 +35,7 @@ public class PhpVariable {
      * @param value  Sets the value of variable
      */
     public PhpVariable(String name, String value) {
-        this.name = name;
+        this(name);
         this.setValue(value);
     }
 

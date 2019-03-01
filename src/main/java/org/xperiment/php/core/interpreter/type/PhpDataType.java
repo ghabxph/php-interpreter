@@ -88,7 +88,8 @@ public abstract class PhpDataType {
      */
     public PhpDataType value(String value) {
         this.value = value;
-        return firstChain.determineType();
+        this.type = firstChain.determineType();
+        return type();
     }
 
     /**
